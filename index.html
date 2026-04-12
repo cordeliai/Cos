@@ -199,7 +199,7 @@
             <div onclick="shareCard()" class="action-btn">
                 <span>🔗</span> 공유
             </div>
-            <a href="윤성현-디지털명함(세로).png" download="윤성현_디지털명함.png" class="action-btn">
+            <a href="윤성현-디지털명함(세로).png" download="윤성현-디지털명함(세로).png" class="action-btn">
                 <span>📥</span> 명함
             </a>
             <div onclick="downloadVCard()" class="action-btn">
@@ -225,19 +225,38 @@ function shareCard() {
         t.select();
         document.execCommand("copy");
         document.body.removeChild(t);
-        alert("명함 링크가 복사되었습니다.");
+        alert("명함 주소가 복사되었습니다.\n원하는 곳(카카오톡, PC 메신저 등)에 붙여넣기 하세요!");
     }
 }
 
-// 2. 연락처 저장 기능
+// 2. 연락처 저장 기능 (링크 정보 모두 포함 & 안내 팝업 추가)
 function downloadVCard() {
-    const v = "BEGIN:VCARD\nVERSION:3.0\nFN:윤성현 (코드스튜디오)\nORG:코드스튜디오\nTEL;TYPE=CELL:01085342437\nEMAIL:powerysh@hanmail.net\nURL:" + window.location.href + "\nEND:VCARD";
+    const v = 
+        "BEGIN:VCARD\n" +
+        "VERSION:3.0\n" +
+        "FN:윤성현 (코드스튜디오)\n" +
+        "ORG:지니메이커스;코드스튜디오\n" +
+        "TEL;TYPE=CELL:01085342437\n" +
+        "EMAIL:powerysh@hanmail.net\n" +
+        "ADR;TYPE=WORK:;;부산광역시 해운대구 마린시티 2로 2 마린파크 303호;;;;\n" +
+        "URL;TYPE=WORK:" + window.location.href + "\n" +              // 명함 웹사이트
+        "URL;TYPE=블로그:https://blog.naver.com/forceysh\n" +         // 블로그
+        "URL;TYPE=인스타그램:https://www.instagram.com/codestudio_hd/\n" + // 인스타그램
+        "END:VCARD";
+        
     const b = new Blob([v], { type: "text/vcard;charset=utf-8;" });
     const u = window.URL.createObjectURL(b);
     const a = document.createElement("a");
     a.download = "윤성현_연락처.vcf";
     a.href = u;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    
+    // 명함을 받은 사람이 당황하지 않도록 명확한 지시 전달
+    setTimeout(() => {
+        alert("📥 연락처 파일이 다운로드 되었습니다.\n\n화면 상단이나 하단에 뜨는 [열기]를 누르시면 블로그와 인스타가 포함된 연락처가 저장됩니다.");
+    }, 800);
 }
 </script>
 
