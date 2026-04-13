@@ -23,6 +23,19 @@
             background-color: #fcfcfc;
             font-family: 'Noto Sans KR', sans-serif;
             color: #333;
+            
+            /* 🔒 텍스트 드래그 및 모바일 꾹 누르기 방지 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* 🔒 이미지 꾹 누르기/드래그 방지 */
+        img {
+            -webkit-user-drag: none;
+            pointer-events: none; 
         }
 
         .business-card {
@@ -75,6 +88,7 @@
 
         .contact-info { text-align: left; font-size: 0.85rem; line-height: 1.6; }
 
+        /* 🔒 링크 클릭은 정상적으로 되도록 허용 */
         .info-item {
             display: flex;
             align-items: center;
@@ -82,6 +96,7 @@
             text-decoration: none;
             color: #555;
             padding-bottom: 2px;
+            pointer-events: auto;
         }
 
         .info-item .label {
@@ -116,6 +131,7 @@
             gap: 6px;
         }
 
+        /* 🔒 버튼 클릭은 정상적으로 되도록 허용 */
         .action-btn {
             flex: 1;
             display: inline-flex;
@@ -132,6 +148,7 @@
             color: #df6928;
             background-color: transparent;
             cursor: pointer;
+            pointer-events: auto;
         }
 
         .action-btn span {
@@ -145,7 +162,8 @@
         }
     </style>
 </head>
-<body>
+
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 
 <div class="business-card">
     <div class="top-bar"></div>
@@ -210,6 +228,14 @@
 </div>
 
 <script>
+// 🔒 PC 키보드 단축키 방지 (F12, Ctrl+C, Ctrl+S 등 차단)
+document.addEventListener('keydown', function(e) {
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 67) || (e.ctrlKey && e.keyCode == 83)) {
+        e.preventDefault();
+        return false;
+    }
+});
+
 // 1. 공유 기능
 function shareCard() {
     if (navigator.share) {
@@ -229,8 +255,12 @@ function shareCard() {
     }
 }
 
-// 2. 연락처 저장 기능 (링크 정보 모두 포함 & 안내 팝업 추가)
+// 2. 연락처 저장 기능 (링크 정보 모두 포함 & 안내 팝업 추가 & 한글 깨짐 방지)
 function downloadVCard() {
+    const cardUrl = window.location.href;
+    const blogUrl = "https://blog.naver.com/forceysh";
+    const instaUrl = "https://www.instagram.com/codestudio_hd/";
+
     const v = 
         "BEGIN:VCARD\n" +
         "VERSION:3.0\n" +
@@ -239,12 +269,14 @@ function downloadVCard() {
         "TEL;TYPE=CELL:01085342437\n" +
         "EMAIL:powerysh@hanmail.net\n" +
         "ADR;TYPE=WORK:;;부산광역시 해운대구 마린시티 2로 2 마린파크 303호;;;;\n" +
-        "URL;TYPE=WORK:" + window.location.href + "\n" +              // 명함 웹사이트
-        "URL;TYPE=블로그:https://blog.naver.com/forceysh\n" +         // 블로그
-        "URL;TYPE=인스타그램:https://www.instagram.com/codestudio_hd/\n" + // 인스타그램
+        "URL;TYPE=WORK:" + cardUrl + "\n" +              
+        "URL;TYPE=Blog:" + blogUrl + "\n" +         
+        "URL;TYPE=Instagram:" + instaUrl + "\n" + 
+        "NOTE:디지털 명함: " + cardUrl + "\\n블로그: " + blogUrl + "\\n인스타그램: " + instaUrl + "\n" + 
         "END:VCARD";
         
-    const b = new Blob([v], { type: "text/vcard;charset=utf-8;" });
+    // 아이폰 등에서 한글 깨짐 방지를 위한 BOM(0xEF, 0xBB, 0xBF) 추가
+    const b = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), v], { type: "text/vcard;charset=utf-8;" });
     const u = window.URL.createObjectURL(b);
     const a = document.createElement("a");
     a.download = "윤성현_연락처.vcf";
@@ -255,7 +287,7 @@ function downloadVCard() {
     
     // 명함을 받은 사람이 당황하지 않도록 명확한 지시 전달
     setTimeout(() => {
-        alert("📥 연락처 파일이 다운로드 되었습니다.\n\n화면 상단이나 하단에 뜨는 [열기]를 누르시면 블로그와 인스타가 포함된 연락처가 저장됩니다.");
+        alert("📥 연락처 파일이 다운로드 되었습니다.\n\n화면 상단이나 하단에 뜨는 [열기]를 누르시면 직장 정보와 함께 명함·블로그·인스타 링크가 포함된 연락처가 저장됩니다.");
     }, 800);
 }
 </script>
