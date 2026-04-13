@@ -23,8 +23,6 @@
             background-color: #fcfcfc;
             font-family: 'Noto Sans KR', sans-serif;
             color: #333;
-            
-            /* 🔒 텍스트 드래그 및 모바일 꾹 누르기 방지 */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -32,7 +30,6 @@
             -webkit-touch-callout: none;
         }
 
-        /* 🔒 이미지 꾹 누르기/드래그 방지 */
         img {
             -webkit-user-drag: none;
             pointer-events: none; 
@@ -56,10 +53,7 @@
             margin-bottom: 25px;
         }
 
-        .card-content {
-            padding: 0 28px;
-        }
-
+        .card-content { padding: 0 28px; }
         .logo-container { margin-bottom: 20px; }
         .logo-container img { width: 140px; height: auto; opacity: 0.85; }
 
@@ -79,7 +73,7 @@
             font-weight: 700; 
             margin: 0 0 4px 0; 
             color: #111; 
-            letter-spacing: 0.5rem; /* 자간 조정 */
+            letter-spacing: 0.5rem; 
             text-indent: 0.5rem; 
         }
         .company { font-size: 0.85rem; font-weight: 400; color: #888; margin: 0; }
@@ -88,7 +82,6 @@
 
         .contact-info { text-align: left; font-size: 0.85rem; line-height: 1.6; }
 
-        /* 🔒 링크 클릭은 정상적으로 되도록 허용 */
         .info-item {
             display: flex;
             align-items: center;
@@ -108,14 +101,18 @@
             font-size: 0.75rem;
         }
 
+        /* 📍 주소/길찾기 섹션 스타일 수정 */
         .address-box {
             margin-top: 10px;
             text-align: left;
             font-size: 0.75rem;
-            color: #999;
+            color: #555;
             line-height: 1.4;
             display: flex;
             margin-bottom: 25px;
+            text-decoration: none; /* 밑줄 제거 */
+            pointer-events: auto;
+            cursor: pointer;
         }
         .address-box .label {
             width: 18px;
@@ -124,6 +121,7 @@
             margin-right: 12px;
             flex-shrink: 0;
         }
+        .address-box:active { background-color: #f9f9f9; }
 
         .btn-group {
             display: flex;
@@ -131,7 +129,6 @@
             gap: 6px;
         }
 
-        /* 🔒 버튼 클릭은 정상적으로 되도록 허용 */
         .action-btn {
             flex: 1;
             display: inline-flex;
@@ -205,13 +202,13 @@
             </div>
         </div>
 
-        <div class="address-box">
+        <a href="https://m.map.naver.com/search2/search.naver?query=부산광역시 해운대구 마린시티 2로 2 마린파크 303호" target="_blank" class="address-box">
             <span class="label">A</span>
             <span class="value">
                 부산광역시 해운대구 마린시티 2로 2<br>
-                마린파크 303호
+                마린파크 303호 (네이버 길찾기)
             </span>
-        </div>
+        </a>
 
         <div class="btn-group">
             <div onclick="shareCard()" class="action-btn">
@@ -228,7 +225,7 @@
 </div>
 
 <script>
-// 🔒 PC 키보드 단축키 방지 (F12, Ctrl+C, Ctrl+S 등 차단)
+// 🔒 보안 기능
 document.addEventListener('keydown', function(e) {
     if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 67) || (e.ctrlKey && e.keyCode == 83)) {
         e.preventDefault();
@@ -236,7 +233,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 1. 공유 기능
+// 1. 공유 기능 최적화
 function shareCard() {
     if (navigator.share) {
         navigator.share({
@@ -251,11 +248,11 @@ function shareCard() {
         t.select();
         document.execCommand("copy");
         document.body.removeChild(t);
-        alert("명함 주소가 복사되었습니다.\n원하는 곳(카카오톡, PC 메신저 등)에 붙여넣기 하세요!");
+        alert("명함 주소가 복사되었습니다.\n원하는 곳에 붙여넣기 하여 공유해 보세요!");
     }
 }
 
-// 2. 연락처 저장 기능 (링크 정보 모두 포함 & 안내 팝업 추가 & 한글 깨짐 방지)
+// 2. 연락처 저장 기능 (BOM 추가로 한글 깨짐 방지)
 function downloadVCard() {
     const cardUrl = window.location.href;
     const blogUrl = "https://blog.naver.com/forceysh";
@@ -275,7 +272,6 @@ function downloadVCard() {
         "NOTE:디지털 명함: " + cardUrl + "\\n블로그: " + blogUrl + "\\n인스타그램: " + instaUrl + "\n" + 
         "END:VCARD";
         
-    // 아이폰 등에서 한글 깨짐 방지를 위한 BOM(0xEF, 0xBB, 0xBF) 추가
     const b = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), v], { type: "text/vcard;charset=utf-8;" });
     const u = window.URL.createObjectURL(b);
     const a = document.createElement("a");
@@ -285,9 +281,8 @@ function downloadVCard() {
     a.click();
     document.body.removeChild(a);
     
-    // 명함을 받은 사람이 당황하지 않도록 명확한 지시 전달
     setTimeout(() => {
-        alert("📥 연락처 파일이 다운로드 되었습니다.\n\n화면 상단이나 하단에 뜨는 [열기]를 누르시면 직장 정보와 함께 명함·블로그·인스타 링크가 포함된 연락처가 저장됩니다.");
+        alert("📥 연락처 파일이 다운로드 되었습니다.\n\n[열기]를 누르시면 블로그와 인스타가 포함된 연락처가 저장됩니다.");
     }, 800);
 }
 </script>
