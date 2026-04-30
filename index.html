@@ -23,6 +23,7 @@
             background-color: #fcfcfc;
             font-family: 'Noto Sans KR', sans-serif;
             color: #333;
+            /* 🔒 보안: 텍스트 드래그 및 모바일 꾹 누르기 방지 */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -81,82 +82,38 @@
         .divider { width: 25px; height: 1px; background-color: #df6928; margin: 15px auto; opacity: 0.4; }
 
         .contact-info { text-align: left; font-size: 0.85rem; line-height: 1.6; }
+        .info-item { display: flex; align-items: center; margin-bottom: 6px; text-decoration: none; color: #555; pointer-events: auto; }
+        .info-item .label { width: 18px; font-weight: 700; color: #df6928; margin-right: 12px; font-size: 0.75rem; }
 
-        .info-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 6px;
+        .address-box { 
+            margin-top: 10px; 
+            text-align: left; 
+            font-size: 0.75rem; 
+            color: #555; 
+            line-height: 1.4; 
+            display: flex; 
+            margin-bottom: 25px; 
             text-decoration: none;
-            color: #555;
-            padding-bottom: 2px;
-            pointer-events: auto;
-        }
-
-        .info-item .label {
-            width: 18px;
-            font-weight: 700;
-            color: #df6928;
-            margin-right: 12px;
-            flex-shrink: 0;
-            font-size: 0.75rem;
-        }
-
-        /* 📍 주소/길찾기 섹션 스타일 수정 */
-        .address-box {
-            margin-top: 10px;
-            text-align: left;
-            font-size: 0.75rem;
-            color: #555;
-            line-height: 1.4;
-            display: flex;
-            margin-bottom: 25px;
-            text-decoration: none; /* 밑줄 제거 */
             pointer-events: auto;
             cursor: pointer;
         }
-        .address-box .label {
-            width: 18px;
-            font-weight: 700;
-            color: #df6928;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
+        .address-box .label { width: 18px; font-weight: 700; color: #df6928; margin-right: 12px; flex-shrink: 0; }
         .address-box:active { background-color: #f9f9f9; }
 
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-        }
-
+        /* 🛠️ 버튼 그룹 레이아웃 최적화 */
+        .btn-group { display: flex; justify-content: center; gap: 6px; }
         .action-btn {
-            flex: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 7px 0;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            border: 1px solid #df6928;
-            color: #df6928;
-            background-color: transparent;
-            cursor: pointer;
+            flex: 1; display: inline-flex; align-items: center; justify-content: center;
+            text-decoration: none; font-weight: 500; padding: 10px 0; border-radius: 50px;
+            font-size: 0.65rem; letter-spacing: -0.5px; transition: all 0.2s ease;
+            border: 1px solid #df6928; color: #df6928; background-color: transparent; cursor: pointer;
             pointer-events: auto;
         }
+        .action-btn span { font-size: 0.8rem; margin-right: 3px; }
+        .action-btn:active { background-color: rgba(223, 105, 40, 0.05); transform: scale(0.97); }
 
-        .action-btn span {
-            font-size: 0.85rem;
-            margin-right: 4px;
-        }
-
-        .action-btn:active {
-            background-color: rgba(223, 105, 40, 0.05);
-            transform: scale(0.97);
-        }
+        /* 카카오톡 전용 색상 강조 */
+        .kakao-btn { background-color: #fee500; border-color: #fee500; color: #111; }
     </style>
 </head>
 
@@ -164,7 +121,6 @@
 
 <div class="business-card">
     <div class="top-bar"></div>
-
     <div class="card-content">
         <div class="logo-container">
             <img src="COS_로고_영문.png" alt="CODE STUDIO 로고">
@@ -201,7 +157,8 @@
                 </a>
             </div>
         </div>
-
+        
+        <!-- 📍 네이버 지도 길찾기 연결 -->
         <a href="https://m.map.naver.com/search2/search.naver?query=부산광역시 해운대구 마린시티 2로 2 마린파크 303호" target="_blank" class="address-box">
             <span class="label">A</span>
             <span class="value">
@@ -210,22 +167,17 @@
             </span>
         </a>
 
+        <!-- 🛠️ 하단 버튼 구성: 공유, 카톡상담, 명함저장 -->
         <div class="btn-group">
-            <div onclick="shareCard()" class="action-btn">
-                <span>🔗</span> 공유
-            </div>
-            <a href="윤성현-디지털명함(세로).png" download="윤성현-디지털명함(세로).png" class="action-btn">
-                <span>📥</span> 명함
-            </a>
-            <div onclick="downloadVCard()" class="action-btn">
-                <span>💾</span> 저장
-            </div>
+            <div onclick="shareCard()" class="action-btn"><span>🔗</span> 공유</div>
+            <a href="https://open.kakao.com/o/sdQg6Jsi" target="_blank" class="action-btn kakao-btn"><span>💬</span> 카톡상담</a>
+            <a href="윤성현-디지털명함(세로).png" download="윤성현-디지털명함(세로).png" class="action-btn"><span>📥</span> 명함저장</a>
         </div>
     </div>
 </div>
 
 <script>
-// 🔒 보안 기능
+/* 🔒 보안: PC 키보드 단축키 방지 */
 document.addEventListener('keydown', function(e) {
     if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 67) || (e.ctrlKey && e.keyCode == 83)) {
         e.preventDefault();
@@ -233,7 +185,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 1. 공유 기능 최적화
+/* 공유 기능 */
 function shareCard() {
     if (navigator.share) {
         navigator.share({
@@ -250,40 +202,6 @@ function shareCard() {
         document.body.removeChild(t);
         alert("명함 주소가 복사되었습니다.\n원하는 곳에 붙여넣기 하여 공유해 보세요!");
     }
-}
-
-// 2. 연락처 저장 기능 (BOM 추가로 한글 깨짐 방지)
-function downloadVCard() {
-    const cardUrl = window.location.href;
-    const blogUrl = "https://blog.naver.com/forceysh";
-    const instaUrl = "https://www.instagram.com/codestudio_hd/";
-
-    const v = 
-        "BEGIN:VCARD\n" +
-        "VERSION:3.0\n" +
-        "FN:윤성현 (코드스튜디오)\n" +
-        "ORG:지니메이커스;코드스튜디오\n" +
-        "TEL;TYPE=CELL:01085342437\n" +
-        "EMAIL:powerysh@hanmail.net\n" +
-        "ADR;TYPE=WORK:;;부산광역시 해운대구 마린시티 2로 2 마린파크 303호;;;;\n" +
-        "URL;TYPE=WORK:" + cardUrl + "\n" +              
-        "URL;TYPE=Blog:" + blogUrl + "\n" +         
-        "URL;TYPE=Instagram:" + instaUrl + "\n" + 
-        "NOTE:디지털 명함: " + cardUrl + "\\n블로그: " + blogUrl + "\\n인스타그램: " + instaUrl + "\n" + 
-        "END:VCARD";
-        
-    const b = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), v], { type: "text/vcard;charset=utf-8;" });
-    const u = window.URL.createObjectURL(b);
-    const a = document.createElement("a");
-    a.download = "윤성현_연락처.vcf";
-    a.href = u;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    
-    setTimeout(() => {
-        alert("📥 연락처 파일이 다운로드 되었습니다.\n\n[열기]를 누르시면 블로그와 인스타가 포함된 연락처가 저장됩니다.");
-    }, 800);
 }
 </script>
 
