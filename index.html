@@ -23,7 +23,6 @@
             background-color: #fcfcfc;
             font-family: 'Noto Sans KR', sans-serif;
             color: #333;
-            /* 🔒 보안: 텍스트 드래그 및 모바일 꾹 누르기 방지 */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -92,15 +91,21 @@
             color: #555; 
             line-height: 1.4; 
             display: flex; 
-            margin-bottom: 25px; 
+            margin-bottom: 15px; 
             text-decoration: none;
             pointer-events: auto;
             cursor: pointer;
         }
         .address-box .label { width: 18px; font-weight: 700; color: #df6928; margin-right: 12px; flex-shrink: 0; }
-        .address-box:active { background-color: #f9f9f9; }
 
-        /* 🛠️ 버튼 그룹 레이아웃 최적화 */
+        /* 📍 추가된 브라우저 안내 문구 스타일 */
+        .browser-notice {
+            font-size: 0.65rem;
+            color: #bbb;
+            margin-bottom: 10px;
+            letter-spacing: -0.02rem;
+        }
+
         .btn-group { display: flex; justify-content: center; gap: 6px; }
         .action-btn {
             flex: 1; display: inline-flex; align-items: center; justify-content: center;
@@ -111,8 +116,6 @@
         }
         .action-btn span { font-size: 0.8rem; margin-right: 3px; }
         .action-btn:active { background-color: rgba(223, 105, 40, 0.05); transform: scale(0.97); }
-
-        /* 카카오톡 전용 색상 강조 */
         .kakao-btn { background-color: #fee500; border-color: #fee500; color: #111; }
     </style>
 </head>
@@ -125,49 +128,31 @@
         <div class="logo-container">
             <img src="COS_로고_영문.png" alt="CODE STUDIO 로고">
         </div>
-
         <div class="qr-section">
             <img src="25kS9.png" alt="명함 QR코드">
         </div>
-
         <div class="profile">
             <p class="name">윤성현</p>
             <p class="company">원장 | 코드스튜디오</p>
         </div>
-
         <div class="divider"></div>
-
         <div class="contact-info">
-            <a href="tel:01085342437" class="info-item">
-                <span class="label">M</span>
-                <span class="value">010.8534.2437</span>
-            </a>
-            <a href="mailto:powerysh@hanmail.net" class="info-item">
-                <span class="label">E</span>
-                <span class="value">powerysh@hanmail.net</span>
-            </a>
+            <a href="tel:01085342437" class="info-item"><span class="label">M</span><span class="value">010.8534.2437</span></a>
+            <a href="mailto:powerysh@hanmail.net" class="info-item"><span class="label">E</span><span class="value">powerysh@hanmail.net</span></a>
             <div class="links">
-                <a href="https://blog.naver.com/forceysh" class="info-item" target="_blank">
-                    <span class="label">B</span>
-                    <span class="value">blog.naver.com/forceysh</span>
-                </a>
-                <a href="https://www.instagram.com/codestudio_hd/" class="info-item" target="_blank">
-                    <span class="label">I</span>
-                    <span class="value">instagram.com/codestudio_hd/</span>
-                </a>
+                <a href="https://blog.naver.com/forceysh" class="info-item" target="_blank"><span class="label">B</span><span class="value">blog.naver.com/forceysh</span></a>
+                <a href="https://www.instagram.com/codestudio_hd/" class="info-item" target="_blank"><span class="label">I</span><span class="value">instagram.com/codestudio_hd/</span></a>
             </div>
         </div>
         
-        <!-- 📍 네이버 지도 길찾기 연결 -->
         <a href="https://m.map.naver.com/search2/search.naver?query=부산광역시 해운대구 마린시티 2로 2 마린파크 303호" target="_blank" class="address-box">
             <span class="label">A</span>
-            <span class="value">
-                부산광역시 해운대구 마린시티 2로 2<br>
-                마린파크 303호 (네이버 길찾기)
-            </span>
+            <span class="value">부산광역시 해운대구 마린시티 2로 2 마린파크 303호 (길찾기)</span>
         </a>
 
-        <!-- 🛠️ 하단 버튼 구성: 공유, 카톡상담, 명함저장 -->
+        <!-- 📍 안내 문구 추가 -->
+        <div class="browser-notice">공유·저장은 '다른 브라우저로 열기'를 권장합니다.</div>
+
         <div class="btn-group">
             <div onclick="shareCard()" class="action-btn"><span>🔗</span> 공유</div>
             <a href="https://open.kakao.com/o/sdQg6Jsi" target="_blank" class="action-btn kakao-btn"><span>💬</span> 카톡상담</a>
@@ -177,33 +162,20 @@
 </div>
 
 <script>
-/* 🔒 보안: PC 키보드 단축키 방지 */
 document.addEventListener('keydown', function(e) {
     if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 67) || (e.ctrlKey && e.keyCode == 83)) {
-        e.preventDefault();
-        return false;
+        e.preventDefault(); return false;
     }
 });
 
-/* 공유 기능 */
 function shareCard() {
     if (navigator.share) {
-        navigator.share({
-            title: '윤성현 원장 | 디지털 명함',
-            text: '지니메이커스 | 코드스튜디오 윤성현 원장의 명함입니다.',
-            url: window.location.href,
-        }).catch(console.error);
+        navigator.share({ title: '윤성현 원장 | 디지털 명함', text: '코드스튜디오 윤성현 원장의 명함입니다.', url: window.location.href, }).catch(console.error);
     } else {
-        const t = document.createElement("input");
-        document.body.appendChild(t);
-        t.value = window.location.href;
-        t.select();
-        document.execCommand("copy");
-        document.body.removeChild(t);
+        const t = document.createElement("input"); document.body.appendChild(t); t.value = window.location.href; t.select(); document.execCommand("copy"); document.body.removeChild(t);
         alert("명함 주소가 복사되었습니다.\n원하는 곳에 붙여넣기 하여 공유해 보세요!");
     }
 }
 </script>
-
 </body>
 </html>
